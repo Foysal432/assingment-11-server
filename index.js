@@ -31,6 +31,21 @@ async function run() {
 
 // create collection
 const addedFoods =client.db('addedfoods').collection('addfoods')
+// get addfoods
+app.get('/addfoods',async(req,res)=>{
+  const cursor = addedFoods.find();
+  const result = await cursor.toArray();
+  res.send(result)
+})
+// post alladdedfoods
+app.post('/addfoods', async(req,res)=>{
+  const foods =req.body;
+  console.log(foods);
+  const result = await addedFoods.insertOne(foods)
+  res.send(result);
+})
+
+
 
 
     // Send a ping to confirm a successful connection
