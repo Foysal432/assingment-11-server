@@ -32,12 +32,27 @@ async function run() {
 // create collection
 const addedFoods =client.db('addedfoods').collection('allfoods')
 // get addfoods
+
+
+// filtering and shoting data by name and expire date
+// http://localhost:5000/addfoods?foodname=Pasta
 app.get('/addfoods',async(req,res)=>{
-  const cursor = addedFoods.find();
+  const queryObj = {}
+  const foodname =req.query.foodname;
+
+if (foodname) {
+  queryObj.foodname = foodname
+}
+
+  const cursor = addedFoods.find(queryObj);
   const result = await cursor.toArray();
   res.send(result)
 })
 // post alladdedfoods
+
+
+
+
 app.post('/addfoods', async(req,res)=>{
   const foods =req.body;
   console.log(foods);
