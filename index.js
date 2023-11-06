@@ -30,7 +30,7 @@ async function run() {
     await client.connect();
 
 // create collection
-const addedFoods =client.db('addedfoods').collection('addfoods')
+const addedFoods =client.db('addedfoods').collection('allfoods')
 // get addfoods
 app.get('/addfoods',async(req,res)=>{
   const cursor = addedFoods.find();
