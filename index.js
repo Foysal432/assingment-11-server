@@ -35,23 +35,30 @@ const addedFoods =client.db('addedfoods').collection('allfoods')
 
 
 // filtering and shoting data by name and expire date
+// filtering
 // http://localhost:5000/addfoods?foodname=Pasta
+// shorting:--
+// http://localhost:5000/addfoods?sortField=foodquantity&sortOrder=desc
 app.get('/addfoods',async(req,res)=>{
-  const queryObj = {}
+  let queryObj = {}
+  let sortObj = {}
   const foodname =req.query.foodname;
+  const sortField =(req.query.sortField)
+  const sortOrder =(req.query.sortOrder)
 
 if (foodname) {
   queryObj.foodname = foodname
 }
+// sort
+if (sortField && sortOrder) {
+  sortObj[sortField]= sortOrder
+}
 
-  const cursor = addedFoods.find(queryObj);
+  const cursor = addedFoods.find(queryObj).sort(sortObj);
   const result = await cursor.toArray();
   res.send(result)
 })
 // post alladdedfoods
-
-
-
 
 app.post('/addfoods', async(req,res)=>{
   const foods =req.body;
@@ -76,12 +83,6 @@ run().catch(console.dir);
 
 
 // mongodb
-
-
-
-
-
-
 app.get('/',(req,res)=>{
     res.send('server is running')
 })
