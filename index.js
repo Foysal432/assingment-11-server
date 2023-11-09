@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express()
 require('dotenv').config()
 const port=process.env.PORT || 5000;
@@ -67,7 +67,23 @@ app.post('/addfoods', async(req,res)=>{
   res.send(result);
 })
 
+// get data details
 
+
+// get detail a item
+// app.get('/addfoods/:id',async(req,res)=>{
+//   const detail =req.params.detail;
+//   const query ={_id: new ObjectId(detail)};
+//   const user = await addedFoods.findOne(query);
+//   res.send(user)
+// })
+app.get('/addfoods/:id', async (req, res)=>{
+  const id=req.params.id;
+  const query={_id: new ObjectId(id) 
+  };
+  const result=await addedFoods.findOne(query)
+  res.send(result)
+})
 
 
     // Send a ping to confirm a successful connection
