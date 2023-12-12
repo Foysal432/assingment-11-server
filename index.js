@@ -27,7 +27,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
 // create collection
 const addedFoods =client.db('addedfoods').collection('allfoods')
@@ -58,7 +58,52 @@ if (sortField && sortOrder) {
   const result = await cursor.toArray();
   res.send(result)
 })
-// post alladdedfoods
+
+// get data for user only
+// app.get('/allfoods/:email',async(req,res)=>{
+//   const email = req.params.email;
+//   const query ={email:email}
+//   const user = addedFoods.find(query);
+//   const result = await user.toArray() 
+//   res.send(result)
+// })
+// delate operation
+app.delete('/addfoods/:id',async(req,res)=>{
+  const id = req.params.id;
+  const query ={_id:new ObjectId(id)}
+  const result =await addedFoods.deleteOne(query)
+  res.send(result)
+})
+
+// // update item
+app.get('/addfoods/:id',async(req,res)=>{
+  const id =req.params.id;
+  const query ={_id:new ObjectId(id)};
+  const user = await addedFoods.findOne(query);
+  res.send(user)
+})
+
+
+// update
+app.put('/addfoods/:id',async(req,res)=>{
+  const id =req.params.id;
+  const filter ={_id: new ObjectId(id)}
+  const options ={upsert:true};
+  const updateditem = req.body;
+  const iteam ={
+    $set:{
+      foodname:updateditem.foodname,
+      foodimage:updateditem.foodimage,
+      foodquantity:updateditem.foodquantity,
+      pickuplocation:updateditem.pickuplocation,
+    }
+  }
+  const result =await addedFoods.updateOne (filter,iteam,options);
+  res.send(result)
+})
+
+
+// post alladdedfoods 
 
 app.post('/addfoods', async(req,res)=>{
   const foods =req.body;
